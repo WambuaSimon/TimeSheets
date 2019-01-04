@@ -6,13 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".Activity_Home">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <com.skyhope.eventcalenderlibrary.CalenderEvent
+        android:id="@+id/calender_event"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:current_month_day_color="@color/colorAccent"
+        app:month_color="@color/colorPrimaryDark"
+        app:next_icon="@drawable/next"
+        app:off_month_day_color="@color/colorPrimaryDark"
+        app:previous_icon="@drawable/previous"
+        app:selector_color="@color/colorPrimary"
+        app:week_name_color="@color/colorPrimaryDark" />
 
 </android.support.constraint.ConstraintLayout>
