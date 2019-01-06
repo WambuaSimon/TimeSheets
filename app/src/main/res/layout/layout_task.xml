@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sell_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+
+        android:id="@+id/linear_material"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/btn_background"
+        android:gravity="center_vertical"
+        android:padding="5dp">
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:text="Project"
+            android:textSize="20sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#B8BECC" />
+
+        <Spinner
+            android:id="@+id/project"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="10"
+
+            android:entries="@array/project_arrays"
+            android:prompt="@string/project_prompt"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/task_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/btn_background"
+        android:hint="Enter Task Description"
+        android:maxLines="10"
+        android:inputType="number"
+        android:padding="10dp" />
+
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:layout_marginTop="5dp"
+           android:orientation="horizontal"
+           android:padding="5dp">
+
+           <Button
+               android:id="@+id/cancel"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_marginRight="40dp"
+               android:layout_weight="1"
+               android:background="@color/colorPrimary"
+               android:text="Cancel"
+               android:textAllCaps="false"
+               android:textColor="@android:color/white" />
+
+           <Button
+               android:id="@+id/proceed"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:background="@color/colorPrimary"
+               android:text="Submit"
+               android:textAllCaps="false"
+               android:textColor="@android:color/white" />
+
+       </LinearLayout>
+
+
+</LinearLayout>

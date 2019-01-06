@@ -14,6 +14,7 @@ import java.util.Calendar;
 
 public class Activity_Home extends AppCompatActivity {
     private static final String TAG = "CalenderTest";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +31,13 @@ public class Activity_Home extends AppCompatActivity {
             @Override
             public void onGetDay(DayContainerModel dayContainerModel) {
                 Log.d(TAG, dayContainerModel.getDate());
+                /*show time-range picker: pick start and end time then get start time,end time, and date*/
+
+                /*on click set end time, invoke dialog to show project and task*/
+
+
+
+
             }
         });
     }

@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Time Sheets</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="project_prompt">Choose a Project</string>
+    <string name="password_hint">Password</string>
+
+    <string-array name="project_arrays">
+        <item>--Select Project--</item>
+
+    </string-array>
 </resources>
