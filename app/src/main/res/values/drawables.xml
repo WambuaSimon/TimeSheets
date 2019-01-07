@@ -1,0 +1,3 @@
+<resources>
+    <item name="ic_arrow_drop_down" type="drawable">@android:drawable/arrow_down_float</item>
+</resources>
