@@ -60,8 +60,8 @@
                     android:layout_height="?attr/actionBarSize"
                     android:background="?android:selectableItemBackground"
                     android:clickable="true"
-                    android:orientation="vertical"
-                    android:focusable="true">
+                    android:focusable="true"
+                    android:orientation="vertical">
 
                     <View
                         android:id="@+id/centerInParent"
@@ -94,7 +94,7 @@
                         android:id="@+id/date_picker_arrow"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                       
+                        android:layout_alignBottom="@id/date_picker_text_view"
                         android:layout_toRightOf="@id/date_picker_text_view"
                         app:srcCompat="@drawable/ic_arrow_drop_down"
                         tools:ignore="ContentDescription,RtlHardcoded" />
@@ -106,6 +106,10 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"></ListView>
 
 </android.support.design.widget.CoordinatorLayout>

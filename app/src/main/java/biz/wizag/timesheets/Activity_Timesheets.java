@@ -12,7 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -33,6 +35,8 @@ public class Activity_Timesheets extends AppCompatActivity  {
 
     private boolean isExpanded = false;
 
+    String[] listArray = {"8 AM","9 AM","10 AM","11 AM","12 PM","1 PM","2 PM","3 PM","4 PM","5 PM","6 PM"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +44,12 @@ public class Activity_Timesheets extends AppCompatActivity  {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        setTitle("CompactCalendarViewToolbar");
+
+        ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.listview_row, listArray);
+        ListView mlistView = findViewById(R.id.list);
+        mlistView.setAdapter(adapter);
+
+//        setTitle("CompactCalendarViewToolbar");
 
 
         appBarLayout = findViewById(R.id.app_bar_layout);
@@ -107,12 +116,7 @@ public class Activity_Timesheets extends AppCompatActivity  {
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+
     }
 
 

@@ -11,16 +11,15 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Activity_Home" />
         <activity android:name=".TimeRangeSelecterActivity">
-
-        </activity>
-        <activity android:name=".Activity_Login" />
-        <activity android:name=".Activity_Timesheets">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activity_Login" />
+        <activity android:name=".Activity_Timesheets"></activity>
+        <activity android:name=".Activity_Show_Tasks"></activity>
     </application>
 
 </manifest>

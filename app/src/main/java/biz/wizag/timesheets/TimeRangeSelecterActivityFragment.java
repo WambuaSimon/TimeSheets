@@ -53,7 +53,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        selectTimeRangeButton = getActivity().findViewById(R.id.bSelectTimeRangeFragment);
+
         CalenderEvent calenderEvent = getActivity().findViewById(R.id.calender_event);
 
         Calendar calendar = Calendar.getInstance();
@@ -70,15 +70,6 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                 tpd.setOnTimeRangeSetListener(this);
             }
         }
-        /*selectTimeRangeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final TimeRangePickerDialog timePickerDialog = TimeRangePickerDialog.newInstance(
-                        TimeRangeSelecterActivityFragment.this, false);
-                timePickerDialog.show(getActivity().getSupportFragmentManager(), TIMERANGEPICKER_TAG);
-            }
-        });*/
-
 
         calenderEvent.initCalderItemClickCallback(new CalenderDayClickListener() {
             @Override
@@ -119,14 +110,14 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
         project = dialogView.findViewById(R.id.project);
         task = dialogView.findViewById(R.id.task_description);
 
-        cancel = dialogView.findViewById(R.id.cancel);
+       /* cancel = dialogView.findViewById(R.id.cancel);
         proceed = dialogView.findViewById(R.id.proceed);
-
+*/
 
         dialogBuilder.setTitle("Task Details");
         dialogBuilder.setCancelable(false);
 
-        cancel.setOnClickListener(new View.OnClickListener() {
+       /* cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -136,13 +127,13 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
         proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Send to db", Toast.LENGTH_SHORT).show();
 
             }
-        });
-        /*dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+        });*/
+        dialogBuilder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
+                Toast.makeText(getActivity(), "Send to db", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -150,7 +141,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
             public void onClick(DialogInterface dialog, int whichButton) {
                 //pass
             }
-        });*/
+        });
         AlertDialog b = dialogBuilder.create();
         b.show();
 

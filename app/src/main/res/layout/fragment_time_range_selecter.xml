@@ -22,11 +22,11 @@
         app:selector_color="@color/colorPrimary"
         app:week_name_color="@color/colorPrimaryDark" />
 
-    <Button
+    <!--<Button
         android:id="@+id/bSelectTimeRangeFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Set Time Range" />
+        android:text="Set Time Range" />-->
 
     <TextView
         android:id="@+id/tvSelectedTimeRangeFragment"
