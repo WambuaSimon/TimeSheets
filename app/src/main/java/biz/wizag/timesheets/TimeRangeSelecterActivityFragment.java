@@ -1,9 +1,13 @@
 package biz.wizag.timesheets;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -16,20 +20,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.skyhope.eventcalenderlibrary.CalenderEvent;
 import com.skyhope.eventcalenderlibrary.listener.CalenderDayClickListener;
 import com.skyhope.eventcalenderlibrary.model.DayContainerModel;
 import com.skyhope.eventcalenderlibrary.model.Event;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import me.tittojose.www.timerangepicker_library.TimeRangePickerDialog;
 
@@ -147,4 +164,213 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 
 
     }
+
+
+    private void loadRequest() {
+        com.android.volley.RequestQueue queue = Volley.newRequestQueue(Activity_Sell.this);
+        final ProgressDialog pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, POST_MATERIAL,
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+
+                            JSONObject jsonObject = new JSONObject(response);
+                            pDialog.dismiss();
+                            String message = jsonObject.getString("message");
+                            JSONObject data = jsonObject.getJSONObject("data");
+                            request_id = data.getString("loadRequestId");
+
+                            /*store loadRequestId in shared prefs*/
+                            SharedPreferences sp = getSharedPreferences(SHARED_PREF_LOCATION_NAME, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sp.edit();
+                            editor.putString("loadRequestId", request_id);
+                            editor.apply();
+
+
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+//                            postLocationUpdates();
+                            startActivity(new Intent(getApplicationContext(), Activity_Home.class));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        //Toast.makeText(Activity_Sell.this, "", Toast.LENGTH_SHORT).show();
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                error.getMessage();
+                Snackbar.make(sell_layout, "Request could not be placed" + error.getMessage(), Snackbar.LENGTH_LONG).show();
+                pDialog.dismiss();
+            }
+        }) {
+            //adding parameters to the request
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("material_item", String.valueOf(id_material));
+                params.put("material_detail", String.valueOf(id_detail));
+                params.put("material_quantity", quantity_txt);
+                params.put("material_class", String.valueOf(id_class));
+                params.put("material_unit", String.valueOf(id_unit));
+                params.put("supplier_id", String.valueOf(id_supplier));
+                params.put("driver_location", location);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                SessionManager sessionManager = new SessionManager(getApplicationContext());
+                HashMap<String, String> user = sessionManager.getUserDetails();
+                String token = user.get("access_token");
+                String bearer = "Bearer ".concat(token);
+                Map<String, String> headersSys = super.getHeaders();
+                Map<String, String> headers = new HashMap<String, String>();
+                headersSys.remove("Authorization");
+                headers.put("Authorization", bearer);
+                headers.putAll(headersSys);
+                return headers;
+            }
+        };
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+
+    /*Selecting Material type*/
+    private void getTasks() {
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        final ProgressDialog pDialog = new ProgressDialog(context);
+        pDialog.setMessage("Loading...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, " ", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+
+                    JSONObject jsonObject = new JSONObject(response);
+                    pDialog.dismiss();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                pDialog.dismiss();
+                Toast.makeText(getActivity(), "An Error Occurred" + error.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+
+
+        }) {
+
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                SessionManager sessionManager = new SessionManager(getActivity());
+                HashMap<String, String> user = sessionManager.getUserDetails();
+                String accessToken = user.get("access_token");
+
+                String bearer = "Bearer " + accessToken;
+                Map<String, String> headersSys = super.getHeaders();
+                Map<String, String> headers = new HashMap<String, String>();
+                headersSys.remove("Authorization");
+                headers.put("Authorization", bearer);
+                headers.putAll(headersSys);
+                return headers;
+            }
+        };
+
+
+        MySingleton.getInstance(context).addToRequestQueue(stringRequest);
+
+
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        stringRequest.setRetryPolicy(policy);
+        requestQueue.add(stringRequest);
+
+
+    }
+
+
+    private void createTask() {
+        com.android.volley.RequestQueue queue = Volley.newRequestQueue(getActivity());
+        final ProgressDialog pDialog = new ProgressDialog(context);
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ,
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+
+                            JSONObject jsonObject = new JSONObject(response);
+                            pDialog.dismiss();
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        //Toast.makeText(Activity_Sell.this, "", Toast.LENGTH_SHORT).show();
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                error.getMessage();
+                Toast.makeText(getActivity(), "Could not create task", Toast.LENGTH_SHORT).show();
+                pDialog.dismiss();
+            }
+        }) {
+            //adding parameters to the request
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("material_item", String.valueOf(id_material));
+                params.put("material_detail", String.valueOf(id_detail));
+                params.put("material_quantity", quantity_txt);
+                params.put("material_class", String.valueOf(id_class));
+                params.put("material_unit", String.valueOf(id_unit));
+                params.put("supplier_id", String.valueOf(id_supplier));
+                params.put("driver_location", location);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                SessionManager sessionManager = new SessionManager(getActivity());
+                HashMap<String, String> user = sessionManager.getUserDetails();
+                String token = user.get("access_token");
+                String bearer = "Bearer ".concat(token);
+                Map<String, String> headersSys = super.getHeaders();
+                Map<String, String> headers = new HashMap<String, String>();
+                headersSys.remove("Authorization");
+                headers.put("Authorization", bearer);
+                headers.putAll(headersSys);
+                return headers;
+            }
+        };
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+
 }
