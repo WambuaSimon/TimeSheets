@@ -53,7 +53,7 @@ public class Activity_Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         enter_username = findViewById(R.id.email);
-        enter_password = findViewById(R.id.password);
+        enter_password =(TextInputEditText) findViewById(R.id.enter_password);
 
         // Session Manager
         session = new SessionManager(getApplicationContext());
