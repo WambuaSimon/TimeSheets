@@ -6,7 +6,9 @@
 
     <string name="project_prompt">Choose a Project</string>
     <string name="password_hint">Password</string>
-
+    <string name="error_msg_no_internet">Not connected to internet</string>
+    <string name="error_msg_timeout">The server took too long to respond</string>
+    <string name="error_msg_unknown">An unexpected error occurred</string>
     <string-array name="project_arrays">
         <item>--Select Project--</item>
 

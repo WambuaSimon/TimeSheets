@@ -3,6 +3,7 @@
     package="biz.wizag.timesheets">
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,14 +12,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activity_Home" />
-        <activity android:name=".TimeRangeSelecterActivity">
+        <activity android:name=".Activity_Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity_Login" />
+        <activity android:name=".TimeRangeSelecterActivity" />
         <activity android:name=".Activity_Timesheets"></activity>
         <activity android:name=".Activity_Show_Tasks"></activity>
     </application>

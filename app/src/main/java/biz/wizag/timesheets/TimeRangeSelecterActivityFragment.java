@@ -4,7 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+
 import android.content.SharedPreferences;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -48,6 +50,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import biz.wizag.SessionManager;
 import me.tittojose.www.timerangepicker_library.TimeRangePickerDialog;
 
 
@@ -57,7 +60,9 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
     public static final String TIMERANGEPICKER_TAG = "timerangepicker";
     private static final String TAG = "CalenderTest";
     String selecte_date;
-
+    String startTime,endTime;
+    Spinner project;
+    EditText task;
     public TimeRangeSelecterActivityFragment() {
     }
 
@@ -108,17 +113,16 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 
     @Override
     public void onTimeRangeSelected(int startHour, int startMin, int endHour, int endMin) {
-        String startTime = startHour + " : " + startMin;
-        String endTime = endHour + " : " + endMin;
-        timeRangeSelectedTextView.setText(startTime + "\n" + endTime + "\n" + selecte_date);
+         startTime = startHour + " : " + startMin;
+         endTime = endHour + " : " + endMin;
+//        timeRangeSelectedTextView.setText(startTime + "\n" + endTime + "\n" + selecte_date);
         showTasksDialog();
     }
 
 
     public void showTasksDialog() {
         Button cancel, proceed;
-        Spinner project;
-        EditText task;
+
 
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = this.getLayoutInflater();
@@ -127,31 +131,15 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
         project = dialogView.findViewById(R.id.project);
         task = dialogView.findViewById(R.id.task_description);
 
-       /* cancel = dialogView.findViewById(R.id.cancel);
-        proceed = dialogView.findViewById(R.id.proceed);
-*/
-
         dialogBuilder.setTitle("Task Details");
         dialogBuilder.setCancelable(false);
 
-       /* cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        proceed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });*/
         dialogBuilder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 
-                Toast.makeText(getActivity(), "Send to db", Toast.LENGTH_SHORT).show();
-
+//                Toast.makeText(getActivity(), "Send to db", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), Activity_Show_Tasks.class);
+                startActivity(intent);
             }
         });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -167,12 +155,12 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 
 
     private void loadRequest() {
-        com.android.volley.RequestQueue queue = Volley.newRequestQueue(Activity_Sell.this);
-        final ProgressDialog pDialog = new ProgressDialog(this);
+        com.android.volley.RequestQueue queue = Volley.newRequestQueue(getActivity());
+        final ProgressDialog pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Loading...");
         pDialog.show();
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, POST_MATERIAL,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, ,
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -180,20 +168,6 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 
                             JSONObject jsonObject = new JSONObject(response);
                             pDialog.dismiss();
-                            String message = jsonObject.getString("message");
-                            JSONObject data = jsonObject.getJSONObject("data");
-                            request_id = data.getString("loadRequestId");
-
-                            /*store loadRequestId in shared prefs*/
-                            SharedPreferences sp = getSharedPreferences(SHARED_PREF_LOCATION_NAME, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.putString("loadRequestId", request_id);
-                            editor.apply();
-
-
-                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-//                            postLocationUpdates();
-                            startActivity(new Intent(getApplicationContext(), Activity_Home.class));
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -204,10 +178,11 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                 }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                pDialog.cancel();
                 error.getMessage();
-                Snackbar.make(sell_layout, "Request could not be placed" + error.getMessage(), Snackbar.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Task could not be created", Toast.LENGTH_SHORT).show();
                 pDialog.dismiss();
+
             }
         }) {
             //adding parameters to the request
@@ -227,7 +202,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                SessionManager sessionManager = new SessionManager(getApplicationContext());
+                SessionManager sessionManager = new SessionManager(getActivity());
                 HashMap<String, String> user = sessionManager.getUserDetails();
                 String token = user.get("access_token");
                 String bearer = "Bearer ".concat(token);
@@ -245,9 +220,9 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 
 
     /*Selecting Material type*/
-    private void getTasks() {
+    private void getProjects() {
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        final ProgressDialog pDialog = new ProgressDialog(context);
+        final ProgressDialog pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Loading...");
         pDialog.setCancelable(false);
         pDialog.show();
@@ -296,7 +271,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
         };
 
 
-        MySingleton.getInstance(context).addToRequestQueue(stringRequest);
+        MySingleton.getInstance(getActivity()).addToRequestQueue(stringRequest);
 
 
         int socketTimeout = 30000;
@@ -310,7 +285,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 
     private void createTask() {
         com.android.volley.RequestQueue queue = Volley.newRequestQueue(getActivity());
-        final ProgressDialog pDialog = new ProgressDialog(context);
+        final ProgressDialog pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Loading...");
         pDialog.show();
         // Request a string response from the provided URL.
