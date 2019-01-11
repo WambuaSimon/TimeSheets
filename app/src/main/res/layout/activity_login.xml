@@ -17,12 +17,11 @@
             android:layout_height="match_parent">
 
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <!--<ImageView
+                <ImageView
                     android:layout_width="350dp"
                     android:layout_height="100dp"
                     android:layout_centerHorizontal="true"
@@ -37,16 +36,17 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginRight="40dp"
                     android:layout_marginTop="140dp"
-                    android:src="@drawable/logo_name" />-->
+                    android:src="@drawable/logo_name" />
 
 
                 <EditText
-                    android:id="@+id/email"
+                    android:id="@+id/enter_username"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    android:layout_below="@id/login_logo"
                     android:layout_margin="20dp"
-                    android:background="@drawable/btn_background"
-                    android:hint="Email"
+                    android:background="@drawable/sell"
+                    android:hint="Email/Phone number(07XX..)"
                     android:inputType="textEmailAddress"
                     android:paddingLeft="20dp" />
 
@@ -54,9 +54,9 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
-
-                    android:layout_marginTop="25dp"
+                    android:layout_below="@id/login_logo"
                     android:layout_marginRight="40dp"
+                    android:layout_marginTop="25dp"
                     android:background="@drawable/correct"
                     android:padding="10dp"
                     android:paddingLeft="0dp"
@@ -67,24 +67,27 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
-                    android:layout_marginTop="25dp"
+                    android:layout_below="@id/login_logo"
                     android:layout_marginRight="40dp"
+                    android:layout_marginTop="25dp"
                     android:background="@drawable/wrong"
                     android:padding="10dp"
                     android:src="@drawable/white_wrong"
                     android:visibility="gone" />
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    android:layout_below="@id/enter_username"
+                    android:layout_marginBottom="20dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/btn_background"
+                    android:background="@drawable/sell"
                     app:passwordToggleEnabled="true">
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/password"
+                        android:id="@+id/enter_password"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
@@ -98,8 +101,9 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
-                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/enter_username"
                     android:layout_marginRight="40dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/correct"
                     android:padding="10dp"
                     android:src="@drawable/white_tick"
@@ -109,8 +113,9 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
-                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/enter_username"
                     android:layout_marginRight="40dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/wrong"
                     android:padding="10dp"
                     android:src="@drawable/white_tick"
@@ -121,27 +126,45 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/password"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="20dp">
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="20dp">
 
                     <Button
                         android:id="@+id/button_login"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/enter_password"
                         android:layout_centerHorizontal="true"
-                        android:background="@color/colorPrimary"
+                        android:layout_weight="1"
+                        android:background="#173470"
                         android:padding="5dp"
                         android:text="LOGIN"
                         android:textColor="#ffffff"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp" />
 
+                    <Button
+                        android:id="@+id/supaduka_signup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="#3D444F"
+                        android:padding="5dp"
+                        android:text="REGISTER NOW"
+                        android:textColor="#ffffff"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
 
-            </LinearLayout>
+            </RelativeLayout>
         </android.support.design.widget.CoordinatorLayout>
     </LinearLayout>
 </ScrollView>

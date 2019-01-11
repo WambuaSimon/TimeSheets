@@ -2,6 +2,7 @@ package biz.wizag.timesheets;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -134,7 +135,8 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
             public void onClick(DialogInterface dialog, int whichButton) {
 
                 Toast.makeText(getActivity(), "Send to db", Toast.LENGTH_SHORT).show();
-
+                Intent intent=new Intent(getContext(),Activity_Show_Tasks.class);
+                startActivity(intent);
             }
         });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
