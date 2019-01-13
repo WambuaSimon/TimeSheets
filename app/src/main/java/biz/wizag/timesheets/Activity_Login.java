@@ -57,7 +57,7 @@ public class Activity_Login extends AppCompatActivity {
     String token_name, name;
     String LoginUser = "http://timesheets.wizag.biz/api/login";
     String login_token;
-
+    private static final String SHARED_PREF_NAME = "profile";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,8 +158,13 @@ public class Activity_Login extends AppCompatActivity {
 
                                 Toast.makeText(getApplicationContext(), "User Logged in successfully", Toast.LENGTH_LONG).show();
 
-                                Intent intent = new Intent(getApplicationContext(), TimeRangeSelecterActivity.class);
-                                intent.putExtra("email", username);
+                                SharedPreferences sp = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sp.edit();
+                                editor.putString("email", username);
+                                editor.apply();
+
+                                Intent intent = new Intent(getBaseContext(), TimeRangeSelecterActivity.class);
+
                                 startActivity(intent);
                                 finish();
 

@@ -74,8 +74,9 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
     ArrayList<String> Projects;
     String project_name;
     SharedPreferences sp;
-    String user_name;
     String email;
+    String task_txt;
+    String project_txt;
     public TimeRangeSelecterActivityFragment() {
     }
 
@@ -97,11 +98,9 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
         Event event = new Event(calendar.getTimeInMillis(), "Test");
         calenderEvent.addEvent(event);
 
-        Bundle extras = getActivity().getIntent().getExtras();
-        if (extras != null) {
-           email = extras.getString("email");
+        sp = this.getActivity().getSharedPreferences("profile", Context.MODE_PRIVATE);
 
-        }
+        email = sp.getString("email", null);
 
         timeRangeSelectedTextView = (TextView) getActivity().findViewById(R.id.tvSelectedTimeRangeFragment);
         if (savedInstanceState != null) {
@@ -148,6 +147,20 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
         Projects = new ArrayList<>();
         task = dialogView.findViewById(R.id.task_description);
 
+        project.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                String value = spinner_sell_details.getSelectedItem().toString();
+
+                 project_txt = project.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         dialogBuilder.setTitle("Task Details");
         dialogBuilder.setCancelable(false);
 
@@ -155,6 +168,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 
         dialogBuilder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
+                task_txt = task.getText().toString();
                 createTasks();
 //                Toast.makeText(getActivity(), "Send to db", Toast.LENGTH_SHORT).show();
 
@@ -173,6 +187,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 
 
     private void createTasks() {
+
         com.android.volley.RequestQueue queue = Volley.newRequestQueue(getActivity());
         final ProgressDialog pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Loading...");
@@ -182,6 +197,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        pDialog.dismiss();
                         try {
 
                             JSONObject jsonObject = new JSONObject(response);
@@ -195,7 +211,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                                 Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
 
                             }
-                            pDialog.dismiss();
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -206,11 +222,12 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                 }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                pDialog.cancel();
+                pDialog.dismiss();
                 error.getMessage();
                 error.printStackTrace();
+
                 Toast.makeText(getActivity(), "Task could not be created", Toast.LENGTH_SHORT).show();
-                pDialog.dismiss();
+
 
             }
         }) {
@@ -218,14 +235,15 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("name", email);
+                params.put("email", email);
                 params.put("date", selecte_date);
                 params.put("start_time", startTime);
                 params.put("end_time", endTime);
-                params.put("project", project_name);
-                params.put("task", task.getText().toString());
+                params.put("project", project_txt);
+                params.put("task", task_txt);
                 return params;
             }
+
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -233,7 +251,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                 SessionManager sessionManager = new SessionManager(getActivity());
                 HashMap<String, String> user = sessionManager.getUserDetails();
                 String token = user.get("access_token");
-                String bearer = "Bearer ".concat(token);
+                String bearer = "Bearer " + token;
                 Map<String, String> headersSys = super.getHeaders();
                 Map<String, String> headers = new HashMap<String, String>();
                 headersSys.remove("Authorization");
