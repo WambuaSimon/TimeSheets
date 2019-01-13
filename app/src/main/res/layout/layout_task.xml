@@ -57,41 +57,40 @@
         android:layout_margin="10dp"
         android:background="@drawable/btn_background"
         android:hint="Enter Task Description"
-        android:maxLines="10"
+        android:inputType="text"
         android:maxLength="150"
-
-        android:inputType="number"
+        android:maxLines="10"
         android:padding="10dp" />
 
- <!-- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:layout_marginTop="5dp"
-           android:orientation="horizontal"
-           android:padding="5dp">
+    <!-- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginTop="5dp"
+              android:orientation="horizontal"
+              android:padding="5dp">
 
-           <Button
-               android:id="@+id/cancel"
-               android:layout_width="0dp"
-               android:layout_height="wrap_content"
-               android:layout_marginRight="40dp"
-               android:layout_weight="1"
-               android:background="@color/colorPrimary"
-               android:text="Cancel"
-               android:textAllCaps="false"
-               android:textColor="@android:color/white" />
+              <Button
+                  android:id="@+id/cancel"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_marginRight="40dp"
+                  android:layout_weight="1"
+                  android:background="@color/colorPrimary"
+                  android:text="Cancel"
+                  android:textAllCaps="false"
+                  android:textColor="@android:color/white" />
 
-           <Button
-               android:id="@+id/proceed"
-               android:layout_width="0dp"
-               android:layout_height="wrap_content"
-               android:layout_weight="1"
-               android:background="@color/colorPrimary"
-               android:text="Submit"
-               android:textAllCaps="false"
-               android:textColor="@android:color/white" />
+              <Button
+                  android:id="@+id/proceed"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="1"
+                  android:background="@color/colorPrimary"
+                  android:text="Submit"
+                  android:textAllCaps="false"
+                  android:textColor="@android:color/white" />
 
-       </LinearLayout>-->
+          </LinearLayout>-->
 
 
 </LinearLayout>

@@ -7,6 +7,7 @@ import android.content.Intent;
 
 import android.content.SharedPreferences;
 
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -73,8 +74,8 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
     ArrayList<String> Projects;
     String project_name;
     SharedPreferences sp;
-    String token_name, user_name;
-
+    String user_name;
+    String email;
     public TimeRangeSelecterActivityFragment() {
     }
 
@@ -87,19 +88,20 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Projects = new ArrayList<>();
+
         CalenderEvent calenderEvent = getActivity().findViewById(R.id.calender_event);
-        /*get details from shared prefs*/
-         sp = this.getActivity().getSharedPreferences("token_name", Context.MODE_PRIVATE);
-        token_name = sp.getString("token", null);
-        user_name = sp.getString("name", null);
 
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         Event event = new Event(calendar.getTimeInMillis(), "Test");
         calenderEvent.addEvent(event);
-        getProjects();
+
+        Bundle extras = getActivity().getIntent().getExtras();
+        if (extras != null) {
+           email = extras.getString("email");
+
+        }
 
         timeRangeSelectedTextView = (TextView) getActivity().findViewById(R.id.tvSelectedTimeRangeFragment);
         if (savedInstanceState != null) {
@@ -143,18 +145,19 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
         final View dialogView = inflater.inflate(R.layout.layout_task, null);
         dialogBuilder.setView(dialogView);
         project = dialogView.findViewById(R.id.project);
-
+        Projects = new ArrayList<>();
         task = dialogView.findViewById(R.id.task_description);
 
         dialogBuilder.setTitle("Task Details");
         dialogBuilder.setCancelable(false);
 
+        getProjects();
+
         dialogBuilder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 createTasks();
 //                Toast.makeText(getActivity(), "Send to db", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getContext(), Activity_Show_Tasks.class);
-                startActivity(intent);
+
             }
         });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -186,6 +189,8 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                             if (success.equalsIgnoreCase("true")) {
                                 Toast.makeText(getActivity(), "Information has been submitted successfully", Toast.LENGTH_SHORT).show();
                                 /*redirect to activity list*/
+                                Intent intent = new Intent(getContext(), Activity_Show_Tasks.class);
+                                startActivity(intent);
                             } else {
                                 Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
 
@@ -203,6 +208,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
             public void onErrorResponse(VolleyError error) {
                 pDialog.cancel();
                 error.getMessage();
+                error.printStackTrace();
                 Toast.makeText(getActivity(), "Task could not be created", Toast.LENGTH_SHORT).show();
                 pDialog.dismiss();
 
@@ -212,7 +218,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("name", user_name);
+                params.put("name", email);
                 params.put("date", selecte_date);
                 params.put("start_time", startTime);
                 params.put("end_time", endTime);
@@ -226,7 +232,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                 Map<String, String> params = new HashMap<String, String>();
                 SessionManager sessionManager = new SessionManager(getActivity());
                 HashMap<String, String> user = sessionManager.getUserDetails();
-                String token = token_name;
+                String token = user.get("access_token");
                 String bearer = "Bearer ".concat(token);
                 Map<String, String> headersSys = super.getHeaders();
                 Map<String, String> headers = new HashMap<String, String>();
@@ -309,9 +315,8 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                 Map<String, String> params = new HashMap<String, String>();
                 SessionManager sessionManager = new SessionManager(getActivity());
                 HashMap<String, String> user = sessionManager.getUserDetails();
-                String accessToken = token_name;
-
-                String bearer = "Bearer " + accessToken;
+                String token = user.get("access_token");
+                String bearer = "Bearer " + token;
                 Map<String, String> headersSys = super.getHeaders();
                 Map<String, String> headers = new HashMap<String, String>();
                 headersSys.remove("Authorization");

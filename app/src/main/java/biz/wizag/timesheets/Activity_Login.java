@@ -10,13 +10,24 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 import biz.wizag.APIClient;
@@ -36,14 +47,17 @@ public class Activity_Login extends AppCompatActivity {
     public static final String TOKEN_TYPE = "tokenType";
     String access_token, refresh_token, token_type;
     String username, password;
-    Button timesheet_login,supaduka_signup;
+    Button timesheet_login, supaduka_signup;
     CoordinatorLayout coordinatorLayout;
     EditText enter_username;
     TextInputEditText enter_password;
     SharedPreferences prefs;
     SessionManager session;
     SharedPreferences sp;
-    String token_name,name;
+    String token_name, name;
+    String LoginUser = "http://timesheets.wizag.biz/api/login";
+    String login_token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +66,7 @@ public class Activity_Login extends AppCompatActivity {
 
 
         enter_username = findViewById(R.id.email);
-        enter_password =(TextInputEditText) findViewById(R.id.enter_password);
+        enter_password = (TextInputEditText) findViewById(R.id.enter_password);
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         supaduka_signup = findViewById(R.id.supaduka_signup);
@@ -73,7 +87,7 @@ public class Activity_Login extends AppCompatActivity {
         if (session.isLoggedIn()) {
             startActivity(new Intent(getApplicationContext(), TimeRangeSelecterActivity.class));
             finish();
-            }
+        }
 
         timesheet_login = findViewById(R.id.button_login);
         timesheet_login.setOnClickListener(v -> {
@@ -86,6 +100,10 @@ public class Activity_Login extends AppCompatActivity {
             if (loginValidation()) {
                 username = enter_username.getText().toString();
                 password = enter_password.getText().toString();
+
+                if (!isNetworkConnected()) {
+                    Toast.makeText(this, "Ensure you are have internet connection", Toast.LENGTH_LONG).show();
+                }
                 loginUser();
 
             } else {
@@ -112,93 +130,72 @@ public class Activity_Login extends AppCompatActivity {
         if (!Validation.hasText(enter_username)) ret = false;
         return ret;
     }
+
     private void loginUser() {
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Signing in...");
-        progressDialog.show();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(APIClient.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        com.android.volley.RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        final ProgressDialog pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, LoginUser,
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        pDialog.dismiss();
+                        try {
 
-        ApiInterface service = retrofit.create(ApiInterface.class);
-        // Call<AuthUser> call = service.loginUser("admin@cosand.com", "Qwerty123!","password", "2", "GEf81B8TnpPDibW4NKygaatvBG3RmbYSaJf8SZTA");
-        Call<AuthUser> call = service.loginUser(username, password);
-        call.enqueue(new Callback<AuthUser>() {
-            @Override
-            public void onResponse(Call<AuthUser> call, Response<AuthUser> response) {
-                progressDialog.dismiss();
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        AuthUser authUser = response.body();
-                        access_token = authUser.getAccessToken();
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.has("success")) {
+
+                                /*get token*/
+                                JSONObject success = jsonObject.getJSONObject("success");
+                                login_token = success.getString("token");
+                                Log.i("login_token_log", login_token);
+                                /*store in sharedprefs*/
+
+                                session.createLoginSession(username, password, login_token);
+
+                                Toast.makeText(getApplicationContext(), "User Logged in successfully", Toast.LENGTH_LONG).show();
+
+                                Intent intent = new Intent(getApplicationContext(), TimeRangeSelecterActivity.class);
+                                intent.putExtra("email", username);
+                                startActivity(intent);
+                                finish();
 
 
-                        prefs.edit().putBoolean("oauth.loggedin", true).apply();
-                        prefs.edit().putString(ACCESS_TOKEN, access_token).apply();
-
-                        //  String token = prefs.getString("access_token", ACCESS_TOKEN);
-
-                        session.createLoginSession(username, password);
-
-
-                        Intent intent=new Intent(getApplicationContext(), TimeRangeSelecterActivity.class);
-//                        intent.putExtra("USERNAME", username);
-                        startActivity(intent);
-                        finish();
-
-                    }
-
-                } else if (response.code() >= 400 && response.code() < 599) {
-                    Snackbar snackbar = Snackbar
-                            // .make(coordinatorLayout, ""+response.code(), Snackbar.LENGTH_INDEFINITE)
-                            .make(coordinatorLayout, "Wrong username or password", Snackbar.LENGTH_INDEFINITE)
-                            .setAction("RETRY", new View.OnClickListener() {
-
-                                @Override
-                                public void onClick(View v) {
-                                    loginUser();
-//                                    getDriverProfile();
-                                }
-                            });
-
-                    snackbar.show();
-                } else {
-                    Snackbar snackbar = Snackbar
-                            .make(coordinatorLayout, "Something went wrong", Snackbar.LENGTH_INDEFINITE)
-                            .setAction("RETRY", new View.OnClickListener() {
-
-                                @Override
-                                public void onClick(View v) {
-                                    loginUser();
-//                                    getDriverProfile();
-                                }
-                            });
-
-                    snackbar.show();
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<AuthUser> call, Throwable t) {
-                progressDialog.dismiss();
-                t.printStackTrace();
-                Snackbar snackbar = Snackbar
-                        .make(coordinatorLayout, " " + fetchErrorMessage(t), Snackbar.LENGTH_INDEFINITE)
-                        .setAction("RETRY", new View.OnClickListener() {
-
-                            @Override
-                            public void onClick(View v) {
-                                loginUser();
+                            } else {
+                                Toast.makeText(Activity_Login.this, "User Could not be logged in", Toast.LENGTH_SHORT).show();
                             }
-                        });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-                snackbar.show();
+                        //Toast.makeText(Activity_Sell.this, "", Toast.LENGTH_SHORT).show();
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
+                error.getMessage();
+                Toast.makeText(getApplicationContext(), "Request could not be placed", Toast.LENGTH_LONG).show();
+                pDialog.dismiss();
             }
-        });
+        }) {
+            //adding parameters to the request
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("email", username);
+                params.put("password", password);
+
+                return params;
+            }
+
+
+        };
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
     }
 
     private String fetchErrorMessage(Throwable throwable) {
@@ -217,5 +214,5 @@ public class Activity_Login extends AppCompatActivity {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
     }
-    }
+}
 
