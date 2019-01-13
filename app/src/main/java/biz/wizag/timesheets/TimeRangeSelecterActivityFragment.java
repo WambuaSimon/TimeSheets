@@ -77,6 +77,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
     String email;
     String task_txt;
     String project_txt;
+    String token;
     public TimeRangeSelecterActivityFragment() {
     }
 
@@ -205,7 +206,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                             if (success.equalsIgnoreCase("true")) {
                                 Toast.makeText(getActivity(), "Information has been submitted successfully", Toast.LENGTH_SHORT).show();
                                 /*redirect to activity list*/
-                                Intent intent = new Intent(getContext(), Activity_Show_Tasks.class);
+                                Intent intent = new Intent(getContext(), TimeRangeSelecterActivity.class);
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();

@@ -47,7 +47,7 @@ public class Adapter_Show_Tasks extends RecyclerView.Adapter<Adapter_Show_Tasks.
     @Override
     public Adapter_Show_Tasks.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.activity_show_tasks, parent, false);
+                .inflate(R.layout.layout_show_tasks, parent, false);
         Adapter_Show_Tasks.MyViewHolder myViewHolder = new Adapter_Show_Tasks.MyViewHolder(view);
         return myViewHolder;
     }
