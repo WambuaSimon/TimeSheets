@@ -48,7 +48,7 @@ public class SessionManager {
     /**
      * Create login session
      * */
-    public void createLoginSession(String name, String password, String token){
+    public void createLoginSession(String name, String password){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
 
@@ -59,7 +59,7 @@ public class SessionManager {
         editor.putString(KEY_PASSWORD, password);
 
         //storing access token
-        editor.putString(TOKEN, token);
+//        editor.putString(TOKEN, token);
 
         // commit changes
         editor.commit();

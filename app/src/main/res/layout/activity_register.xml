@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -9,13 +10,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/coordinatorLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="wizag.com.supa.RegisterActivity">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,7 +37,7 @@
 
                     <TextView
                         android:id="@+id/text_dummy_hint_first_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="2dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="10dp"
@@ -109,74 +103,6 @@
                             android:textSize="20sp" />
                     </android.support.design.widget.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/text_dummy_hint_id_passport_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="2dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@android:color/white"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        android:text="ID/ Passport Number"
-                        android:textSize="16sp"
-                        android:visibility="invisible" />
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="ID/ Passport Number"
-                        android:textColorHint="@color/textColor"
-                        app:hintTextAppearance="@style/HintTextStyle">
-
-                        <EditText
-                            android:id="@+id/edit_id"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:background="@drawable/sell"
-                            android:fontFamily="@font/bariol_regular"
-                            android:inputType="number"
-                            android:padding="10dp"
-                            android:textColor="@color/textColor"
-                            android:textColorHint="@color/textColor"
-                            android:textSize="20sp" />
-                    </android.support.design.widget.TextInputLayout>
-
-                    <TextView
-                        android:id="@+id/text_dummy_hint_phone_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="2dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@android:color/white"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        android:text="Phone Number (07XX)"
-                        android:textSize="16sp"
-                        android:visibility="invisible" />
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Phone Number (07XX)"
-                        android:textColorHint="@color/textColor"
-                        app:hintTextAppearance="@style/HintTextStyle">
-
-                        <EditText
-                            android:id="@+id/edit_phone"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:background="@drawable/sell"
-                            android:fontFamily="@font/bariol_regular"
-                            android:inputType="number"
-                            android:maxLength="10"
-                            android:padding="10dp"
-                            android:textColor="@color/textColor"
-                            android:textColorHint="@color/textColor"
-                            android:textSize="20sp" />
-                    </android.support.design.widget.TextInputLayout>
 
                     <TextView
                         android:id="@+id/text_dummy_hint_email_address"
@@ -212,82 +138,7 @@
                             android:textSize="20sp" />
                     </android.support.design.widget.TextInputLayout>
 
-                    <Button
-                        android:id="@+id/upload_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_margin="5dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/sell"
-                        android:drawableLeft="@android:drawable/ic_menu_camera"
-                        android:drawableStart="@android:drawable/ic_menu_camera"
-                        android:drawableTint="@color/colorPrimary"
-                        android:fontFamily="@font/bariol_bold"
-                        android:onClick="showOptions"
-                        android:padding="10dp"
-                        android:text="Upload Image of ID(Front)"
-                        android:textAllCaps="false"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
 
-                    <LinearLayout
-                        android:id="@+id/image_layout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <ImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/id_image"
-                            android:layout_width="match_parent"
-                            android:layout_height="150dp"
-
-                            android:layout_marginTop="10dp"
-                            android:padding="16dp" />
-
-                    </LinearLayout>
-
-                    <Button
-                        android:id="@+id/upload_image_back"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_margin="5dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/sell"
-                        android:drawableLeft="@android:drawable/ic_menu_camera"
-                        android:drawableStart="@android:drawable/ic_menu_camera"
-                        android:drawableTint="@color/colorPrimary"
-                        android:fontFamily="@font/bariol_bold"
-                        android:onClick="showOptionsBack"
-                        android:padding="10dp"
-                        android:text="Upload Image of ID(Back)"
-                        android:textAllCaps="false"
-                        android:textColor="@color/textColor"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-
-                    <LinearLayout
-                        android:id="@+id/image_layout_back"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <ImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/id_image_back"
-                            android:layout_width="match_parent"
-                            android:layout_height="150dp"
-
-                            android:layout_marginTop="10dp"
-                            android:padding="16dp" />
-
-                    </LinearLayout>
 
 
                     <android.support.design.widget.TextInputLayout
@@ -355,7 +206,7 @@
 
             </LinearLayout>
 
-        </android.support.design.widget.CoordinatorLayout>
+
     </LinearLayout>
 </ScrollView>
 

@@ -38,14 +38,17 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonArray;
 import com.skyhope.eventcalenderlibrary.CalenderEvent;
 import com.skyhope.eventcalenderlibrary.listener.CalenderDayClickListener;
 import com.skyhope.eventcalenderlibrary.model.DayContainerModel;
 import com.skyhope.eventcalenderlibrary.model.Event;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,16 +56,25 @@ import java.util.Map;
 import biz.wizag.SessionManager;
 import me.tittojose.www.timerangepicker_library.TimeRangePickerDialog;
 
+import android.content.SharedPreferences;
+
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class TimeRangeSelecterActivityFragment extends Fragment implements TimeRangePickerDialog.OnTimeRangeSelectedListener {
-    Button selectTimeRangeButton;
     TextView timeRangeSelectedTextView;
     public static final String TIMERANGEPICKER_TAG = "timerangepicker";
     private static final String TAG = "CalenderTest";
     String selecte_date;
-    String startTime,endTime;
+    String startTime, endTime;
     Spinner project;
     EditText task;
+    JSONArray projects_array;
+    ArrayList<String> Projects;
+    String project_name;
+    SharedPreferences sp;
+    String token_name, user_name;
+
     public TimeRangeSelecterActivityFragment() {
     }
 
@@ -75,14 +87,19 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        Projects = new ArrayList<>();
         CalenderEvent calenderEvent = getActivity().findViewById(R.id.calender_event);
+        /*get details from shared prefs*/
+         sp = this.getActivity().getSharedPreferences("token_name", Context.MODE_PRIVATE);
+        token_name = sp.getString("token", null);
+        user_name = sp.getString("name", null);
+
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         Event event = new Event(calendar.getTimeInMillis(), "Test");
         calenderEvent.addEvent(event);
-
+        getProjects();
 
         timeRangeSelectedTextView = (TextView) getActivity().findViewById(R.id.tvSelectedTimeRangeFragment);
         if (savedInstanceState != null) {
@@ -113,22 +130,20 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 
     @Override
     public void onTimeRangeSelected(int startHour, int startMin, int endHour, int endMin) {
-         startTime = startHour + " : " + startMin;
-         endTime = endHour + " : " + endMin;
+        startTime = startHour + " : " + startMin;
+        endTime = endHour + " : " + endMin;
 //        timeRangeSelectedTextView.setText(startTime + "\n" + endTime + "\n" + selecte_date);
         showTasksDialog();
     }
 
 
     public void showTasksDialog() {
-        Button cancel, proceed;
-
-
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.layout_task, null);
         dialogBuilder.setView(dialogView);
         project = dialogView.findViewById(R.id.project);
+
         task = dialogView.findViewById(R.id.task_description);
 
         dialogBuilder.setTitle("Task Details");
@@ -136,7 +151,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 
         dialogBuilder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-
+                createTasks();
 //                Toast.makeText(getActivity(), "Send to db", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(), Activity_Show_Tasks.class);
                 startActivity(intent);
@@ -154,19 +169,27 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
     }
 
 
-    private void loadRequest() {
+    private void createTasks() {
         com.android.volley.RequestQueue queue = Volley.newRequestQueue(getActivity());
         final ProgressDialog pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Loading...");
         pDialog.show();
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://timesheets.wizag.biz/api/tasks",
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
 
                             JSONObject jsonObject = new JSONObject(response);
+                            String success = jsonObject.getString("success");
+                            if (success.equalsIgnoreCase("true")) {
+                                Toast.makeText(getActivity(), "Information has been submitted successfully", Toast.LENGTH_SHORT).show();
+                                /*redirect to activity list*/
+                            } else {
+                                Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
+
+                            }
                             pDialog.dismiss();
 
                         } catch (JSONException e) {
@@ -189,13 +212,12 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("material_item", String.valueOf(id_material));
-                params.put("material_detail", String.valueOf(id_detail));
-                params.put("material_quantity", quantity_txt);
-                params.put("material_class", String.valueOf(id_class));
-                params.put("material_unit", String.valueOf(id_unit));
-                params.put("supplier_id", String.valueOf(id_supplier));
-                params.put("driver_location", location);
+                params.put("name", user_name);
+                params.put("date", selecte_date);
+                params.put("start_time", startTime);
+                params.put("end_time", endTime);
+                params.put("project", project_name);
+                params.put("task", task.getText().toString());
                 return params;
             }
 
@@ -204,7 +226,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                 Map<String, String> params = new HashMap<String, String>();
                 SessionManager sessionManager = new SessionManager(getActivity());
                 HashMap<String, String> user = sessionManager.getUserDetails();
-                String token = user.get("access_token");
+                String token = token_name;
                 String bearer = "Bearer ".concat(token);
                 Map<String, String> headersSys = super.getHeaders();
                 Map<String, String> headers = new HashMap<String, String>();
@@ -219,7 +241,6 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
     }
 
 
-    /*Selecting Material type*/
     private void getProjects() {
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         final ProgressDialog pDialog = new ProgressDialog(getActivity());
@@ -228,13 +249,43 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
         pDialog.show();
 
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, " ", new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "http://timesheets.wizag.biz/api/projects", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
 
                     JSONObject jsonObject = new JSONObject(response);
                     pDialog.dismiss();
+                    if (jsonObject != null) {
+
+                        projects_array = jsonObject.getJSONArray("data");
+
+                        for (int z = 0; z < projects_array.length(); z++) {
+                            JSONObject suppliers_object = projects_array.getJSONObject(z);
+                            project_name = suppliers_object.getString("name");
+
+                            if (projects_array != null) {
+
+                                if (Projects.contains(project_name)) {
+
+
+                                } else {
+
+                                    //Toast.makeText(getApplicationContext(), "data\n" + size.getJSONObject(m).getString("size"), Toast.LENGTH_SHORT).show();
+                                    Projects.add(project_name);
+//                                    Type.add(materialTypes.getJSONObject(p).getString("id"));
+
+                                }
+
+                            }
+
+
+                        }
+
+
+                    }
+                    project.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, Projects));
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -258,7 +309,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                 Map<String, String> params = new HashMap<String, String>();
                 SessionManager sessionManager = new SessionManager(getActivity());
                 HashMap<String, String> user = sessionManager.getUserDetails();
-                String accessToken = user.get("access_token");
+                String accessToken = token_name;
 
                 String bearer = "Bearer " + accessToken;
                 Map<String, String> headersSys = super.getHeaders();
@@ -280,71 +331,6 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
         requestQueue.add(stringRequest);
 
 
-    }
-
-
-    private void createTask() {
-        com.android.volley.RequestQueue queue = Volley.newRequestQueue(getActivity());
-        final ProgressDialog pDialog = new ProgressDialog(getActivity());
-        pDialog.setMessage("Loading...");
-        pDialog.show();
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, ,
-                new com.android.volley.Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-
-                            JSONObject jsonObject = new JSONObject(response);
-                            pDialog.dismiss();
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        //Toast.makeText(Activity_Sell.this, "", Toast.LENGTH_SHORT).show();
-                    }
-                }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                error.getMessage();
-                Toast.makeText(getActivity(), "Could not create task", Toast.LENGTH_SHORT).show();
-                pDialog.dismiss();
-            }
-        }) {
-            //adding parameters to the request
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("material_item", String.valueOf(id_material));
-                params.put("material_detail", String.valueOf(id_detail));
-                params.put("material_quantity", quantity_txt);
-                params.put("material_class", String.valueOf(id_class));
-                params.put("material_unit", String.valueOf(id_unit));
-                params.put("supplier_id", String.valueOf(id_supplier));
-                params.put("driver_location", location);
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                SessionManager sessionManager = new SessionManager(getActivity());
-                HashMap<String, String> user = sessionManager.getUserDetails();
-                String token = user.get("access_token");
-                String bearer = "Bearer ".concat(token);
-                Map<String, String> headersSys = super.getHeaders();
-                Map<String, String> headers = new HashMap<String, String>();
-                headersSys.remove("Authorization");
-                headers.put("Authorization", bearer);
-                headers.putAll(headersSys);
-                return headers;
-            }
-        };
-// Add the request to the RequestQueue.
-        queue.add(stringRequest);
     }
 
 

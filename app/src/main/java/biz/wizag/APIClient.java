@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class APIClient {
-    public static final String BASE_URL = "http://timesheets.wizag.biz/";
+    public static final String BASE_URL = "http://timesheets.wizag.biz/api/";
         private static Retrofit retrofit = null;
 
         public static Retrofit getClient() {

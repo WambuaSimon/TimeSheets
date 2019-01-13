@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="biz.wizag.timesheets">
-    <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,6 +22,7 @@
         </activity>
         <activity android:name=".TimeRangeSelecterActivity" />
         <activity android:name=".Activity_Timesheets"></activity>
+        <activity android:name=".Activity_Register"></activity>
         <activity android:name=".Activity_Show_Tasks"></activity>
     </application>
 

@@ -35,34 +35,43 @@ public class Activity_Login extends AppCompatActivity {
     public static final String REFRESH_TOKEN = "refreshToken";
     public static final String TOKEN_TYPE = "tokenType";
     String access_token, refresh_token, token_type;
-    //String username = "admin@cosand.com";
     String username, password;
-    Button timesheet_login;
+    Button timesheet_login,supaduka_signup;
     CoordinatorLayout coordinatorLayout;
     EditText enter_username;
     TextInputEditText enter_password;
     SharedPreferences prefs;
     SessionManager session;
-    private static final String SHARED_PREF_NAME = "profile";
-    String get_profile_url = "http://timesheets.wizag.biz/api/login";
-    String token;
-    JSONArray role_array;
+    SharedPreferences sp;
+    String token_name,name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        prefs = this.getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE);
+
 
         enter_username = findViewById(R.id.email);
         enter_password =(TextInputEditText) findViewById(R.id.enter_password);
 
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+        supaduka_signup = findViewById(R.id.supaduka_signup);
+        supaduka_signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Activity_Login.this, Activity_Register.class);
+                startActivity(intent);
+//                finish();
+            }
+        });
         // Session Manager
         session = new SessionManager(getApplicationContext());
         HashMap<String, String> user = session.getUserDetails();
-        token = user.get("access_token");
+//        token_name = user.get("access_token");
 
 
         if (session.isLoggedIn()) {
-            startActivity(new Intent(getApplicationContext(), Activity_Home.class));
+            startActivity(new Intent(getApplicationContext(), TimeRangeSelecterActivity.class));
             finish();
             }
 
@@ -115,7 +124,7 @@ public class Activity_Login extends AppCompatActivity {
 
         ApiInterface service = retrofit.create(ApiInterface.class);
         // Call<AuthUser> call = service.loginUser("admin@cosand.com", "Qwerty123!","password", "2", "GEf81B8TnpPDibW4NKygaatvBG3RmbYSaJf8SZTA");
-        Call<AuthUser> call = service.loginUser(username, password, "password", "2", "GEf81B8TnpPDibW4NKygaatvBG3RmbYSaJf8SZTA");
+        Call<AuthUser> call = service.loginUser(username, password);
         call.enqueue(new Callback<AuthUser>() {
             @Override
             public void onResponse(Call<AuthUser> call, Response<AuthUser> response) {
@@ -124,32 +133,18 @@ public class Activity_Login extends AppCompatActivity {
                     if (response.body() != null) {
                         AuthUser authUser = response.body();
                         access_token = authUser.getAccessToken();
-                        refresh_token = authUser.getRefreshToken();
-                        token_type = authUser.getTokenType();
 
 
                         prefs.edit().putBoolean("oauth.loggedin", true).apply();
                         prefs.edit().putString(ACCESS_TOKEN, access_token).apply();
-                        prefs.edit().putString(REFRESH_TOKEN, refresh_token).apply();
-                        prefs.edit().putString(TOKEN_TYPE, token_type).apply();
 
                         //  String token = prefs.getString("access_token", ACCESS_TOKEN);
 
-                        session.createLoginSession(username, password, access_token);
-
-                        SharedPreferences sp = getSharedPreferences(SHARED_PREF_NAME, MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sp.edit();
-                        editor.putString("password", password);
-                        editor.apply();
+                        session.createLoginSession(username, password);
 
 
-//                        getIndividualProfile();
-                       /* getDriverProfile();
-                        getCorporateProfile();
-                        getTruckOwner();
-                        getSupplierProfile();*/
-                        Intent intent=new Intent(getApplicationContext(), Activity_Home.class);
-                        intent.putExtra("USERNAME", username);
+                        Intent intent=new Intent(getApplicationContext(), TimeRangeSelecterActivity.class);
+//                        intent.putExtra("USERNAME", username);
                         startActivity(intent);
                         finish();
 
