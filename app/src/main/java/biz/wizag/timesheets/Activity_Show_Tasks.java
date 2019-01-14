@@ -73,19 +73,17 @@ public class Activity_Show_Tasks extends AppCompatActivity {
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        pDialog.dismiss();
                         try {
 
                             JSONObject jsonObject = new JSONObject(response);
-                            pDialog.dismiss();
+
                             JSONArray data = jsonObject.getJSONArray("data");
                             for (int p = 0; p < data.length(); p++) {
                                 Model_Show_Tasks model_tasks = new Model_Show_Tasks();
-
-
                                 JSONObject task_jobs = data.getJSONObject(p);
-                                if (task_jobs == null) {
-                                    Toast.makeText(Activity_Show_Tasks.this, "No tasks history available", Toast.LENGTH_SHORT).show();
-                                } else {
+
+
                                     String email = task_jobs.getString("email");
                                     String date = task_jobs.getString("date");
                                     String start_time = task_jobs.getString("start_time");
@@ -101,7 +99,7 @@ public class Activity_Show_Tasks extends AppCompatActivity {
                                     model_tasks.setTask(task);
 
 
-                                }
+
 
                                 if (tasks.contains(date)) {
                                     /*do nothing*/
@@ -123,7 +121,8 @@ public class Activity_Show_Tasks extends AppCompatActivity {
                 }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                error.getMessage();
+                error.printStackTrace();
 
                 Toast.makeText(getApplicationContext(), "Data could not be loaded", Snackbar.LENGTH_LONG).show();
                 pDialog.dismiss();

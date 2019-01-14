@@ -15,6 +15,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
@@ -76,6 +79,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
     SharedPreferences sp;
     String email;
     String task_txt;
+    SessionManager session;
     String project_txt;
     String token;
     public TimeRangeSelecterActivityFragment() {
@@ -84,6 +88,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_time_range_selecter, container, false);
     }
 
@@ -91,8 +96,9 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        CalenderEvent calenderEvent = getActivity().findViewById(R.id.calender_event);
 
+        CalenderEvent calenderEvent = getActivity().findViewById(R.id.calender_event);
+        session = new SessionManager(getActivity());
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -120,7 +126,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 
                 /*on click set end time, invoke dialog to show project and task*/
                 final TimeRangePickerDialog timePickerDialog = TimeRangePickerDialog.newInstance(
-                        TimeRangeSelecterActivityFragment.this, false);
+                        TimeRangeSelecterActivityFragment.this, true);
                 timePickerDialog.show(getActivity().getSupportFragmentManager(), TIMERANGEPICKER_TAG);
 
                 selecte_date = dayContainerModel.getDate();
@@ -129,6 +135,9 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
             }
         });
     }
+
+
+
 
     @Override
     public void onTimeRangeSelected(int startHour, int startMin, int endHour, int endMin) {
@@ -188,7 +197,6 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 
 
     private void createTasks() {
-
         com.android.volley.RequestQueue queue = Volley.newRequestQueue(getActivity());
         final ProgressDialog pDialog = new ProgressDialog(getActivity());
         pDialog.setMessage("Loading...");
@@ -356,6 +364,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 
 
     }
+
 
 
 }
