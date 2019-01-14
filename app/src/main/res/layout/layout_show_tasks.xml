@@ -24,8 +24,9 @@
                 android:layout_alignBottom="@+id/rel_bottom"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginStart="25dp"
-                android:layout_marginLeft="25dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginBottom="34dp"
                 android:text="Project:"
                 tools:ignore="NotSibling" />
 
@@ -36,9 +37,9 @@
                 android:layout_alignBottom="@+id/rel_bottom"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_marginStart="262dp"
-                android:layout_marginLeft="262dp"
-                android:layout_marginBottom="37dp"
+                android:layout_marginStart="225dp"
+                android:layout_marginLeft="225dp"
+                android:layout_marginBottom="34dp"
                 android:text="Cosand"
                 tools:ignore="NotSibling" />
 
@@ -52,7 +53,8 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginBottom="10dp"
-                android:text="Task:" />
+                android:text="Task:"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/task"
@@ -61,7 +63,8 @@
                 android:layout_alignStart="@+id/project"
                 android:layout_alignTop="@+id/textView4"
                 android:text="Wallet"
-                android:layout_alignLeft="@+id/project" />
+                android:layout_alignLeft="@+id/project"
+                android:visibility="gone"/>
         </RelativeLayout>
 
         <View
@@ -172,7 +175,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/order_status"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="5dp"
             android:text="Date" />
         <!--android:layout_toEndOf="@+id/null"-->
 

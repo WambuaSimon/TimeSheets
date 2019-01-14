@@ -4,30 +4,16 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-
 import android.content.SharedPreferences;
-
-import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -42,7 +28,6 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonArray;
 import com.skyhope.eventcalenderlibrary.CalenderEvent;
 import com.skyhope.eventcalenderlibrary.listener.CalenderDayClickListener;
 import com.skyhope.eventcalenderlibrary.model.DayContainerModel;
@@ -59,10 +44,6 @@ import java.util.Map;
 
 import biz.wizag.SessionManager;
 import me.tittojose.www.timerangepicker_library.TimeRangePickerDialog;
-
-import android.content.SharedPreferences;
-
-import static android.content.Context.MODE_PRIVATE;
 
 
 public class TimeRangeSelecterActivityFragment extends Fragment implements TimeRangePickerDialog.OnTimeRangeSelectedListener {
@@ -214,7 +195,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                             if (success.equalsIgnoreCase("true")) {
                                 Toast.makeText(getActivity(), "Information has been submitted successfully", Toast.LENGTH_SHORT).show();
                                 /*redirect to activity list*/
-                                Intent intent = new Intent(getContext(), TimeRangeSelecterActivity.class);
+                                Intent intent = new Intent(getContext(), Activity_Show_Tasks.class);
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
