@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,7 +63,12 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
     String task_txt;
     SessionManager session;
     String project_txt;
-    String token;
+    String add_project_txt;
+    int id_detail;
+    Button add;
+    EditText add_project;
+    LinearLayout project_layout;
+
     public TimeRangeSelecterActivityFragment() {
     }
 
@@ -118,12 +124,18 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
     }
 
 
-
-
     @Override
     public void onTimeRangeSelected(int startHour, int startMin, int endHour, int endMin) {
         startTime = startHour + " : " + startMin;
         endTime = endHour + " : " + endMin;
+
+        if (startTime.endsWith("0") && startTime.length() == 4) {
+            startTime = startTime.concat("0");
+        }
+        if (endTime.endsWith("0") && endTime.length() == 4) {
+            endTime = endTime.concat("0");
+        }
+
 //        timeRangeSelectedTextView.setText(startTime + "\n" + endTime + "\n" + selecte_date);
         showTasksDialog();
     }
@@ -142,8 +154,15 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 //                String value = spinner_sell_details.getSelectedItem().toString();
+                try {
+                    JSONObject projectClicked = projects_array.getJSONObject(i);
+                     id_detail = projectClicked.getInt("id");
 
-                 project_txt = project.getSelectedItem().toString();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                project_txt = project.getSelectedItem().toString();
             }
 
             @Override
@@ -170,6 +189,56 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                 //pass
             }
         });
+
+        dialogBuilder.setNeutralButton("Add Project", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                /*edittext AND button*/
+//                project_layout.setVisibility(View.VISIBLE);
+//                add_project_txt = add_project.getText().toString();
+                showProjectDialog();
+//                createProject();
+
+
+            }
+        });
+
+
+        AlertDialog b = dialogBuilder.create();
+        b.show();
+
+
+    }
+
+
+    public void showProjectDialog() {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.layout_project, null);
+        dialogBuilder.setView(dialogView);
+        project_layout = dialogView.findViewById(R.id.project_layout);
+        add_project = dialogView.findViewById(R.id.add_project);
+
+
+        dialogBuilder.setTitle("Add Project");
+        dialogBuilder.setCancelable(false);
+
+        getProjects();
+
+        dialogBuilder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                task_txt = task.getText().toString();
+                createProject();
+//                Toast.makeText(getActivity(), "Send to db", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //pass
+            }
+        });
+
+
         AlertDialog b = dialogBuilder.create();
         b.show();
 
@@ -225,12 +294,12 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("email", email);
+//                params.put("email", email);
                 params.put("date", selecte_date);
                 params.put("start_time", startTime);
                 params.put("end_time", endTime);
-                params.put("project", project_txt);
-                params.put("task", task_txt);
+                params.put("project_id", String.valueOf(id_detail));
+                params.put("name", task_txt);
                 return params;
             }
 
@@ -346,6 +415,79 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 
     }
 
+    private void createProject() {
+        com.android.volley.RequestQueue queue = Volley.newRequestQueue(getActivity());
+        final ProgressDialog pDialog = new ProgressDialog(getActivity());
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://timesheets.wizag.biz/api/projects",
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        pDialog.dismiss();
+                        try {
+
+                            JSONObject jsonObject = new JSONObject(response);
+                            String success = jsonObject.getString("success");
+                            if (success.equalsIgnoreCase("true")) {
+                                Toast.makeText(getActivity(), "Project has been created successfully", Toast.LENGTH_SHORT).show();
+                                /*redirect to activity list*/
+//                                Intent intent = new Intent(getContext(), TimeRangeSelecterActivity.class);
+//                                startActivity(intent);
+                            } else {
+                                Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
+
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        //Toast.makeText(Activity_Sell.this, "", Toast.LENGTH_SHORT).show();
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pDialog.dismiss();
+                error.getMessage();
+                error.printStackTrace();
+
+                Toast.makeText(getActivity(), "Project could not be created", Toast.LENGTH_SHORT).show();
+
+
+            }
+        }) {
+            //adding parameters to the request
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("name", add_project.getText().toString());
+
+
+                return params;
+            }
+
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                SessionManager sessionManager = new SessionManager(getActivity());
+                HashMap<String, String> user = sessionManager.getUserDetails();
+                String token = user.get("access_token");
+                String bearer = "Bearer " + token;
+                Map<String, String> headersSys = super.getHeaders();
+                Map<String, String> headers = new HashMap<String, String>();
+                headersSys.remove("Authorization");
+                headers.put("Authorization", bearer);
+                headers.putAll(headersSys);
+                return headers;
+            }
+        };
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
 
 
 }
