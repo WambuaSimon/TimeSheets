@@ -157,9 +157,12 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 //                String value = spinner_sell_details.getSelectedItem().toString();
                 try {
                     JSONObject projectClicked = projects_array.getJSONObject(i);
-                    id_detail = projectClicked.getInt("id");
+
+                    if (projectClicked != null) {
+                        id_detail = projectClicked.getInt("id");
 
 
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -261,6 +264,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                         try {
 
                             JSONObject jsonObject = new JSONObject(response);
+
                             if (jsonObject != null) {
                                 String success = jsonObject.getString("success");
                                 if (success.equalsIgnoreCase("true")) {
@@ -270,6 +274,8 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                                     startActivity(intent);
                                 } else {
                                     Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
+
+
 
                                 }
                             }
