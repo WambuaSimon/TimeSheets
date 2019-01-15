@@ -175,9 +175,10 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 //                String value = spinner_sell_details.getSelectedItem().toString();
                 try {
                     JSONObject projectClicked = projects_array.getJSONObject(i);
-                     id_detail = projectClicked.getInt("id");
+                    if (projectClicked != null) {
+                        id_detail = projectClicked.getInt("id");
 
-
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -283,7 +284,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                             if (success.equalsIgnoreCase("true")) {
                                 Toast.makeText(getActivity(), "Information has been submitted successfully", Toast.LENGTH_SHORT).show();
                                 /*redirect to activity list*/
-                                Intent intent = new Intent(getContext(), TimeRangeSelecterActivity.class);
+                                Intent intent = new Intent(getContext(), Activity_Show_Tasks.class);
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();

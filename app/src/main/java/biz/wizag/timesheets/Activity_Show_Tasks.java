@@ -60,38 +60,37 @@ public class Activity_Show_Tasks extends AppCompatActivity {
 
 
         //  loadUrlData();
-        loadTransactions();
+        loadTasks();
     }
 
-    private void loadTransactions() {
+    private void loadTasks() {
         com.android.volley.RequestQueue queue = Volley.newRequestQueue(Activity_Show_Tasks.this);
         final ProgressDialog pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
         pDialog.show();
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, getTasks,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, getTasks,
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         pDialog.dismiss();
                         try {
 
-                            JSONObject jsonObject = new JSONObject(response);
-
-                            JSONArray data = jsonObject.getJSONArray("data");
-                            for (int p = 0; p < data.length(); p++) {
+//                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray jsonArray = new JSONArray(response);
+                            for (int p = 0; p < jsonArray.length(); p++) {
                                 Model_Show_Tasks model_tasks = new Model_Show_Tasks();
-                                JSONObject task_jobs = data.getJSONObject(p);
+                                JSONObject task_jobs = jsonArray.getJSONObject(p);
 
 
-                                    String email = task_jobs.getString("email");
+//                                    String email = task_jobs.getString("name");
                                     String date = task_jobs.getString("date");
                                     String start_time = task_jobs.getString("start_time");
                                     String end_time = task_jobs.getString("end_time");
-                                    String project = task_jobs.getString("project");
-                                    String task = task_jobs.getString("task");
+                                    String project = task_jobs.getString("project_name");
+                                    String task = task_jobs.getString("name");
 
-                                    model_tasks.setEmail(email);
+
                                     model_tasks.setDate(date);
                                     model_tasks.setStart_time(start_time);
                                     model_tasks.setEnd_time(end_time);
@@ -113,6 +112,7 @@ public class Activity_Show_Tasks extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            e.getMessage();
                         }
                         adapter_show_tasks.notifyDataSetChanged();
 
@@ -128,15 +128,6 @@ public class Activity_Show_Tasks extends AppCompatActivity {
                 pDialog.dismiss();
             }
         }) {
-            //adding parameters to the request
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-
-                //params.put("code", "blst786");
-                //  params.put("")
-                return params;
-            }
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
