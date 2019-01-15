@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -156,7 +157,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 //                String value = spinner_sell_details.getSelectedItem().toString();
                 try {
                     JSONObject projectClicked = projects_array.getJSONObject(i);
-                     id_detail = projectClicked.getInt("id");
+                    id_detail = projectClicked.getInt("id");
 
 
                 } catch (JSONException e) {
@@ -260,17 +261,18 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                         try {
 
                             JSONObject jsonObject = new JSONObject(response);
-                            String success = jsonObject.getString("success");
-                            if (success.equalsIgnoreCase("true")) {
-                                Toast.makeText(getActivity(), "Information has been submitted successfully", Toast.LENGTH_SHORT).show();
-                                /*redirect to activity list*/
-                                Intent intent = new Intent(getContext(), Activity_Show_Tasks.class);
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
+                            if (jsonObject != null) {
+                                String success = jsonObject.getString("success");
+                                if (success.equalsIgnoreCase("true")) {
+                                    Toast.makeText(getActivity(), "Information has been submitted successfully", Toast.LENGTH_SHORT).show();
+                                    /*redirect to activity list*/
+                                    Intent intent = new Intent(getContext(), TimeRangeSelecterActivityFragment.class);
+                                    startActivity(intent);
+                                } else {
+                                    Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
 
+                                }
                             }
-
 
                         } catch (JSONException e) {
                             e.printStackTrace();
