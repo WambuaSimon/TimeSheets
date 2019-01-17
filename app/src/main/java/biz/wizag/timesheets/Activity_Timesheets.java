@@ -13,9 +13,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
@@ -25,7 +28,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class Activity_Timesheets extends AppCompatActivity  {
+public class Activity_Timesheets extends AppCompatActivity {
 
     private AppBarLayout appBarLayout;
 
@@ -35,21 +38,23 @@ public class Activity_Timesheets extends AppCompatActivity  {
 
     private boolean isExpanded = false;
 
-    String[] listArray = {"8 AM","9 AM","10 AM","11 AM","12 PM","1 PM","2 PM","3 PM","4 PM","5 PM","6 PM"};
-
+    TextView end_time, start_time;
+    EditText task_description;
+    Spinner project;
+    Button proceed;
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timesheets);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.listview_row, listArray);
-        ListView mlistView = findViewById(R.id.list);
-        mlistView.setAdapter(adapter);
-
-//        setTitle("CompactCalendarViewToolbar");
+        end_time = findViewById(R.id.end_time);
+        start_time = findViewById(R.id.start_time);
+        task_description = findViewById(R.id.task_description);
+        project = findViewById(R.id.project);
+        proceed = findViewById(R.id.proceed);
 
 
         appBarLayout = findViewById(R.id.app_bar_layout);
@@ -118,7 +123,6 @@ public class Activity_Timesheets extends AppCompatActivity  {
     public void onBackPressed() {
 
     }
-
 
 
 }

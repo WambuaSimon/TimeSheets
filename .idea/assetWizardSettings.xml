@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/opt/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/device/ic_access_time_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/opt/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_add_circle_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -33,9 +33,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="time" />
+                                      <entry key="outputName" value="add_project" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="19e52a" />
+                                      <entry key="themeColor" value="008577" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -47,8 +47,9 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundLayerName" value="ic_launcher_background" />
+                                      <entry key="foregroundImage" value="$PROJECT_DIR$/../logo_time.png" />
                                       <entry key="foregroundLayerName" value="ic_launcher_foreground" />
-                                      <entry key="outputName" value="time_start" />
+                                      <entry key="outputName" value="" />
                                     </map>
                                   </option>
                                 </PersistentState>

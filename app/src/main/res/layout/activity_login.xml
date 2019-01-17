@@ -27,7 +27,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="50dp"
                     android:scaleType="centerInside"
-                    android:src="@drawable/logo_truck" />
+                    android:src="@drawable/logo_time" />
 
                 <ImageView
                     android:id="@+id/login_logo"
@@ -46,7 +46,7 @@
                     android:layout_below="@id/login_logo"
                     android:layout_margin="20dp"
                     android:background="@drawable/sell"
-                    android:hint="Email/Phone number(07XX..)"
+                    android:hint="Email"
                     android:inputType="textEmailAddress"
                     android:paddingLeft="20dp" />
 

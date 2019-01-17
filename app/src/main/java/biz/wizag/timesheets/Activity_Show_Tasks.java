@@ -1,12 +1,14 @@
 package biz.wizag.timesheets;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +56,7 @@ public class Activity_Show_Tasks extends AppCompatActivity {
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
         tasks = new ArrayList<>();
 
+
         //initializing adapter
         adapter_show_tasks = new Adapter_Show_Tasks(tasks, this);
         recycler_view.setAdapter(adapter_show_tasks);
@@ -61,6 +64,27 @@ public class Activity_Show_Tasks extends AppCompatActivity {
 
         //  loadUrlData();
         loadTasks();
+
+
+        recycler_view.addOnItemTouchListener(new RecyclerTouchListener(this, recycler_view, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                if (tasks.size() > position) {
+                    if (tasks.get(position) != null) {
+                        Intent intent = new Intent(getApplicationContext(), Activity_Task.class);
+                        intent.putExtra("task", tasks.get(position).getTask());
+                        startActivity(intent);
+
+                    }
+                }
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
     }
 
     private void loadTasks() {
@@ -84,20 +108,18 @@ public class Activity_Show_Tasks extends AppCompatActivity {
 
 
 //                                    String email = task_jobs.getString("name");
-                                    String date = task_jobs.getString("date");
-                                    String start_time = task_jobs.getString("start_time");
-                                    String end_time = task_jobs.getString("end_time");
-                                    String project = task_jobs.getString("project_name");
-                                    String task = task_jobs.getString("name");
+                                String date = task_jobs.getString("date");
+                                String start_time = task_jobs.getString("start_time");
+                                String end_time = task_jobs.getString("end_time");
+                                String project = task_jobs.getString("project_name");
+                                String task = task_jobs.getString("name");
 
 
-                                    model_tasks.setDate(date);
-                                    model_tasks.setStart_time(start_time);
-                                    model_tasks.setEnd_time(end_time);
-                                    model_tasks.setProject(project);
-                                    model_tasks.setTask(task);
-
-
+                                model_tasks.setDate(date);
+                                model_tasks.setStart_time(start_time);
+                                model_tasks.setEnd_time(end_time);
+                                model_tasks.setProject(project);
+                                model_tasks.setTask(task);
 
 
                                 if (tasks.contains(date)) {

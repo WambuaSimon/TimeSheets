@@ -4,24 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-
 import android.content.SharedPreferences;
-
-import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +30,6 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.JsonArray;
 import com.skyhope.eventcalenderlibrary.CalenderEvent;
 import com.skyhope.eventcalenderlibrary.listener.CalenderDayClickListener;
 import com.skyhope.eventcalenderlibrary.model.DayContainerModel;
@@ -60,10 +46,6 @@ import java.util.Map;
 
 import biz.wizag.SessionManager;
 import me.tittojose.www.timerangepicker_library.TimeRangePickerDialog;
-
-import android.content.SharedPreferences;
-
-import static android.content.Context.MODE_PRIVATE;
 
 
 public class TimeRangeSelecterActivityFragment extends Fragment implements TimeRangePickerDialog.OnTimeRangeSelectedListener {
@@ -132,7 +114,8 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
 
                 /*on click set end time, invoke dialog to show project and task*/
                 final TimeRangePickerDialog timePickerDialog = TimeRangePickerDialog.newInstance(
-                        TimeRangeSelecterActivityFragment.this, true);
+                        TimeRangeSelecterActivityFragment.this, false);
+
                 timePickerDialog.show(getActivity().getSupportFragmentManager(), TIMERANGEPICKER_TAG);
 
                 selecte_date = dayContainerModel.getDate();
@@ -148,12 +131,7 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
         startTime = startHour + " : " + startMin;
         endTime = endHour + " : " + endMin;
 
-        if (startTime.endsWith("0") && startTime.length() == 4) {
-            startTime = startTime.concat("0");
-        }
-        if (endTime.endsWith("0") && endTime.length() == 4) {
-            endTime = endTime.concat("0");
-        }
+
 
 //        timeRangeSelectedTextView.setText(startTime + "\n" + endTime + "\n" + selecte_date);
         showTasksDialog();
@@ -174,10 +152,14 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 //                String value = spinner_sell_details.getSelectedItem().toString();
                 try {
-                    JSONObject projectClicked = projects_array.getJSONObject(i);
-                    if (projectClicked != null) {
-                        id_detail = projectClicked.getInt("id");
+                    if (projects_array != null) {
+                        JSONObject projectClicked = projects_array.getJSONObject(i);
 
+                        if (projectClicked != null) {
+                            id_detail = projectClicked.getInt("id");
+
+
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -280,17 +262,20 @@ public class TimeRangeSelecterActivityFragment extends Fragment implements TimeR
                         try {
 
                             JSONObject jsonObject = new JSONObject(response);
-                            String success = jsonObject.getString("success");
-                            if (success.equalsIgnoreCase("true")) {
-                                Toast.makeText(getActivity(), "Information has been submitted successfully", Toast.LENGTH_SHORT).show();
-                                /*redirect to activity list*/
-                                Intent intent = new Intent(getContext(), Activity_Show_Tasks.class);
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
 
+                            if (jsonObject != null) {
+                                String success = jsonObject.getString("success");
+                                if (success.equalsIgnoreCase("true")) {
+                                    Toast.makeText(getActivity(), "Information has been submitted successfully", Toast.LENGTH_SHORT).show();
+                                    /*redirect to activity list*/
+                                    Intent intent = new Intent(getContext(), Activity_Show_Tasks.class);
+                                    startActivity(intent);
+                                } else {
+                                    Toast.makeText(getActivity(), "An Error Occurred", Toast.LENGTH_SHORT).show();
+
+
+                                }
                             }
-
 
                         } catch (JSONException e) {
                             e.printStackTrace();

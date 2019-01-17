@@ -1,7 +1,6 @@
 package biz.wizag.Adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +50,7 @@ public class Adapter_Show_Tasks extends RecyclerView.Adapter<Adapter_Show_Tasks.
         Adapter_Show_Tasks.MyViewHolder myViewHolder = new Adapter_Show_Tasks.MyViewHolder(view);
         return myViewHolder;
     }
+
 
     @Override
     public void onBindViewHolder(final Adapter_Show_Tasks.MyViewHolder holder, final int listPosition) {

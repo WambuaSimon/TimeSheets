@@ -1,21 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity_Home">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:openDrawer="start">
 
-    <com.skyhope.eventcalenderlibrary.CalenderEvent
-        android:id="@+id/calender_event"
+
+    <include xmlns:android="http://schemas.android.com/apk/res/android"
+        layout="@layout/app_bar_home"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <!--
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:current_month_day_color="@color/colorAccent"
-        app:month_color="@color/colorPrimaryDark"
-        app:next_icon="@drawable/next"
-        app:off_month_day_color="@color/colorPrimaryDark"
-        app:previous_icon="@drawable/previous"
-        app:selector_color="@color/colorPrimary"
-        app:week_name_color="@color/colorPrimaryDark" />
+        tools:context=".Activity_Home">
 
-</android.support.constraint.ConstraintLayout>
+        <com.skyhope.eventcalenderlibrary.CalenderEvent
+            android:id="@+id/calender_event"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:current_month_day_color="@color/colorAccent"
+            app:month_color="@color/colorPrimaryDark"
+            app:next_icon="@drawable/next"
+            app:off_month_day_color="@color/colorPrimaryDark"
+            app:previous_icon="@drawable/previous"
+            app:selector_color="@color/colorPrimary"
+            app:week_name_color="@color/colorPrimaryDark" />
+
+    </android.support.constraint.ConstraintLayout>-->
+</LinearLayout>

@@ -3,6 +3,7 @@ package biz.wizag.timesheets;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.skyhope.eventcalenderlibrary.CalenderEvent;
@@ -19,6 +20,9 @@ public class Activity_Home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         CalenderEvent calenderEvent = findViewById(R.id.calender_event);
 

@@ -42,12 +42,25 @@
     </style>
 
     <style name="AppTheme.NoActionBar">
-    <item name="windowNoTitle">true</item>
-    <item name="windowActionBar">false</item>
-    <item name="android:windowFullscreen">true</item>
-    <item name="android:windowContentOverlay">@null</item>
-</style>
-<style name="HintTextStyle" parent="TextAppearance.Design.Hint">
-<item name="android:textSize">16sp</item>
-</style>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="HintTextStyle" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <attr name="cardStyle" format="reference" />
+
+    <style name="Light" parent="Theme.AppCompat.NoActionBar">
+        <item name="cardStyle">@style/CardView.Light</item>
+        ...
+    </style>
+
+    <style name="Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="cardStyle">@style/CardView.Dark</item>
+
+    </style>
 </resources>
