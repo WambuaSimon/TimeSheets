@@ -85,7 +85,7 @@ public class Activity_Login extends AppCompatActivity {
 
 
         if (session.isLoggedIn()) {
-            startActivity(new Intent(getApplicationContext(), TimeRangeSelecterActivity.class));
+            startActivity(new Intent(getApplicationContext(), Activity_Timesheets.class));
             finish();
         }
 

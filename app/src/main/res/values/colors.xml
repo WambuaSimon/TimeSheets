@@ -9,4 +9,6 @@
     <color name="screen_bg">#F4F4F4</color>
     <color name="text_black">#000000</color>
     <color name="greyish">#f9f9f9</color>
+    <color name="overlay_light_90">#E6FFFFFF</color>
+
 </resources>

@@ -14,14 +14,18 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Activity_Home" />
         <activity android:name=".Activity_Login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".TimeRangeSelecterActivity" />
-        <activity android:name=".Activity_Timesheets"> <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+        <activity
+            android:name=".Activity_Timesheets"
+            android:windowSoftInputMode="stateHidden|adjustResize">
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter></activity>
+        </activity>
         <activity android:name=".Activity_Register"></activity>
         <activity android:name=".Activity_Show_Tasks"></activity>
         <activity android:name=".Activity_Task"></activity>

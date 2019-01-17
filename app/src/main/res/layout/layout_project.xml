@@ -17,13 +17,15 @@
 
 
         <EditText
-            android:id="@+id/add_project"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:id="@+id/create_new_project"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_background"
             android:hint="Enter Project"
-            android:inputType="text"
-            android:padding="10dp" />
+            android:inputType="textCapSentences"
+            android:padding="16dp" />
 
 
     </LinearLayout>
