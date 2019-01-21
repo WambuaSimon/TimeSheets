@@ -163,7 +163,7 @@ public class Activity_Login extends AppCompatActivity {
                                 editor.putString("email", username);
                                 editor.apply();
 
-                                Intent intent = new Intent(getBaseContext(), TimeRangeSelecterActivity.class);
+                                Intent intent = new Intent(getBaseContext(), Activity_Timesheets.class);
 
                                 startActivity(intent);
                                 finish();

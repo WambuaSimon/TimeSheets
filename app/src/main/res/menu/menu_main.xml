@@ -9,4 +9,9 @@
         android:title="Sign out"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/show_tasks"
+        android:title="Show Tasks"
+        app:showAsAction="never" />
+
 </menu>
