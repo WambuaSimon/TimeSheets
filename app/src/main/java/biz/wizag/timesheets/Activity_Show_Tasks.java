@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,11 +41,17 @@ public class Activity_Show_Tasks extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private List<Model_Show_Tasks> tasks;
     private static final String getTasks = "http://timesheets.wizag.biz/api/tasks";
+    String task_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_tasks);
+
+        Toolbar myToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         //initializing the recycler view
         recycler_view = findViewById(R.id.recycler_view);
@@ -69,8 +76,9 @@ public class Activity_Show_Tasks extends AppCompatActivity {
                     if (tasks.get(position) != null) {
                         Intent intent = new Intent(getApplicationContext(), Activity_Task.class);
                         intent.putExtra("task", tasks.get(position).getTask());
+                        intent.putExtra("task_id", task_id);
                         startActivity(intent);
-
+                        finish();
                     }
                 }
 
@@ -99,11 +107,14 @@ public class Activity_Show_Tasks extends AppCompatActivity {
 //                            JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArray = new JSONArray(response);
                             for (int p = 0; p < jsonArray.length(); p++) {
+
+
                                 Model_Show_Tasks model_tasks = new Model_Show_Tasks();
                                 JSONObject task_jobs = jsonArray.getJSONObject(p);
 
 
 //                                    String email = task_jobs.getString("name");
+                                task_id = task_jobs.getString("id");
                                 String date = task_jobs.getString("date");
                                 String start_time = task_jobs.getString("start_time");
                                 String end_time = task_jobs.getString("end_time");

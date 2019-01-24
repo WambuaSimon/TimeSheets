@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/opt/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_add_circle_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/opt/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_delete_forever_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -33,9 +33,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="add_project" />
+                                      <entry key="outputName" value="delete_icon" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="008577" />
+                                      <entry key="themeColor" value="ff0000" />
                                     </map>
                                   </option>
                                 </PersistentState>

@@ -17,6 +17,7 @@
             android:layout_alignParentBottom="true">
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -29,7 +30,7 @@
                 android:text="Project:"
                 tools:ignore="NotSibling" />
 
-            <TextView
+           <!-- <TextView
                 android:textSize="18sp"
                 android:id="@+id/project"
                 android:layout_width="wrap_content"
@@ -43,7 +44,7 @@
                 android:text="Cosand"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
-                tools:ignore="NotSibling" />
+                tools:ignore="NotSibling" />-->
 
             <TextView
                 android:visibility="invisible"
@@ -159,14 +160,14 @@
         <TextView
             android:textColor="@android:color/black"
             android:textStyle="bold"
-            android:id="@+id/order_title"
+            android:id="@+id/project"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/starting_point"
             android:layout_marginBottom="5dp"
             android:gravity="center_horizontal"
             android:padding="5dp"
-            android:text="Task"
+            android:text="Cosand"
 
             android:textSize="20sp" />
 
@@ -205,6 +206,7 @@
         android:padding="6dp"
         android:src="@drawable/check_mark"
         android:background="@drawable/green_circle"/>
+
 
 
 </android.support.design.widget.CoordinatorLayout>

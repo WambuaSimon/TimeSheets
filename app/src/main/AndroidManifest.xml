@@ -27,8 +27,16 @@
 
         </activity>
         <activity android:name=".Activity_Register"></activity>
-        <activity android:name=".Activity_Show_Tasks"></activity>
-        <activity android:name=".Activity_Task"></activity>
+        <activity android:name=".Activity_Show_Tasks">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activity_Task" />
+        </activity>
+        <activity android:name=".Activity_Task">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Activity_Task" />
+        </activity>
     </application>
 
 </manifest>

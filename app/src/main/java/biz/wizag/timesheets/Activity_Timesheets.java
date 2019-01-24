@@ -86,12 +86,14 @@ public class Activity_Timesheets extends AppCompatActivity {
     String date_txt;
     CardView end_time_card, start_time_card;
     private int mYear, mMonth, mDay, mHour, mMinute;
+    SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timesheets);
 
+        session = new SessionManager(getApplicationContext());
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -571,5 +573,35 @@ public class Activity_Timesheets extends AppCompatActivity {
 // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_sign_out) {
+
+            session.logoutUser();
+            finish();
+
+//            return true;
+        }
+        if (id == R.id.show_tasks) {
+
+            startActivity(new Intent(getApplicationContext(), Activity_Show_Tasks.class));
+//            finish();
+
+//            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }
